@@ -4,6 +4,15 @@
 
 ```
 src/med_sentinel/
+├── description/
+│   ├── urdf/
+│   │   ├── panda.urdf              # Franka Panda URDF (mesh paths updated)
+│   │   └── panda_collision.urdf    # Collision-only URDF
+│   ├── srdf/
+│   │   └── panda.srdf              # Planning groups, named states, collision pairs
+│   └── meshes/
+│       ├── collision/*.stl         # Collision meshes
+│       └── visual/*.dae            # Visual meshes
 ├── proto/
 │   └── med_sentinel.proto          # Protobuf schema definitions
 ├── config/
@@ -12,10 +21,11 @@ src/med_sentinel/
 │   └── med_sentinel.launch.py      # ROS2 launch file
 ├── med_sentinel/
 │   ├── scene_builder.py            # Isaac Sim World + Stage setup
+│   ├── robot_model.py              # Pinocchio FK/IK/Jacobians/Dynamics
 │   ├── robot_controller.py         # OmniGraph + joint control
 │   ├── obstacle_manager.py         # "Medical Chaos" obstacle spawner
 │   ├── utils/
-│   │   └── transforms.py           # Quaternion math utilities
+│   │   └── transforms.py           # Pinocchio SE3/Quaternion utilities
 │   └── bridge/
 │       ├── med_sentinel_pb2.py     # Generated protobuf bindings
 │       ├── proto_handler.py        # Protobuf serialization helpers
@@ -50,6 +60,8 @@ and spawns the Franka Panda robot.
 - `world` -- the `omni.isaac.core.World` instance
 - `stage` -- the USD stage (`pxr.Usd.Stage`)
 - `robot` -- the spawned `Robot` prim wrapper
+- `panda_model` -- `PandaModel` instance (Pinocchio, loaded from URDF)
+- `robot_description` -- raw URDF XML string (for ROS2 `robot_description` param)
 
 ### How the hospital is imported
 
@@ -64,6 +76,46 @@ The Franka USD model is similarly referenced from Nucleus. An
 `omni.isaac.core.robots.Robot` wrapper is created around the prim, which
 gives access to joint control APIs (`get_joint_positions`,
 `set_joint_positions`, `get_articulation_controller`).
+
+---
+
+## robot_model.py
+
+**Purpose**: Pinocchio-based model of the Franka Panda, loaded from the
+vendored URDF/SRDF. Provides FK, IK, Jacobians, dynamics, and collision checking.
+
+### Class: `PandaModel`
+
+| Method | What it does |
+|--------|-------------|
+| `forward_kinematics(q)` | Compute EE pose for joint config q |
+| `frame_placement(q, frame_name)` | Pose of any named frame |
+| `all_link_poses(q)` | Poses of all joint frames |
+| `jacobian(q, frame)` | 6xN frame Jacobian (local world-aligned) |
+| `inverse_kinematics(target, q_init)` | Damped least-squares CLIK solver |
+| `mass_matrix(q)` | Joint-space inertia matrix M(q) |
+| `coriolis_matrix(q, dq)` | Coriolis matrix C(q, dq) |
+| `gravity_torques(q)` | Gravity compensation torques g(q) |
+| `inverse_dynamics(q, dq, ddq)` | Full RNEA: tau = M*ddq + C*dq + g |
+| `check_self_collision(q)` | True if self-collision detected |
+| `is_within_limits(q)` | True if all joints within limits |
+| `default_configuration()` | SRDF "default" named state |
+
+### Properties
+
+- `nq`, `nv` -- configuration / velocity space dimensions (both 9)
+- `joint_names` -- ordered list of joint names
+- `lower_limits`, `upper_limits` -- position limits from URDF
+- `velocity_limits`, `effort_limits` -- rate and torque limits
+
+### IK Algorithm
+
+Uses CLIK (Closed-Loop Inverse Kinematics) with damped least-squares:
+1. Compute SE3 error between current and target via `pin.log6()`
+2. Compute local frame Jacobian
+3. Solve `(J^T J + lambda I) dq = J^T error` for velocity step
+4. Integrate with `pin.integrate()` (respects joint topology)
+5. Repeat until error norm < tolerance
 
 ---
 
@@ -129,21 +181,40 @@ Defined in `scene_params.yaml` under `obstacles.assets`. Each entry has:
 
 ## utils/transforms.py
 
-**Purpose**: Quaternion and pose math. All rotations use (w, x, y, z) convention.
+**Purpose**: Spatial math backed by Pinocchio. All quaternions use (w, x, y, z)
+convention (Isaac Sim standard). Pinocchio uses (x, y, z, w) internally --
+the conversion is handled transparently.
+
+### `Pose` dataclass (wraps `pin.SE3`)
+
+| Method/Property | What it does |
+|----------------|-------------|
+| `from_xyzq(x, y, z, qw, qx, qy, qz)` | Construct from position + quaternion |
+| `from_se3(se3)` | Construct from a Pinocchio SE3 |
+| `compose(other)` | Transform composition: `self * other` |
+| `inverse()` | Inverse transform |
+| `act_on_point(point)` | Transform a 3D point |
+| `position`, `orientation` | Numpy arrays |
+| `se3` | Underlying `pin.SE3` object |
+
+### Quaternion Functions
 
 | Function | What it does |
 |----------|-------------|
-| `normalize_quaternion(q)` | Normalize to unit length |
-| `quaternion_multiply(q1, q2)` | Hamilton product |
-| `quaternion_from_euler(r, p, y)` | Euler angles (rad) -> quaternion |
-| `euler_from_quaternion(q)` | Quaternion -> Euler angles |
+| `quaternion_multiply(q1, q2)` | Product via `pin.Quaternion` |
+| `quaternion_inverse(q)` | Conjugate of unit quaternion |
+| `quaternion_slerp(q1, q2, t)` | Spherical linear interpolation |
+| `quaternion_from_euler(r, p, y)` | RPY -> quaternion via `pin.rpy` |
+| `euler_from_quaternion(q)` | Quaternion -> RPY via `pin.rpy` |
+| `quat_wxyz_to_pin(q)` | (w,x,y,z) -> `pin.Quaternion` |
+| `rotation_to_quat_wxyz(R)` | Rotation matrix -> (w,x,y,z) |
+
+### Random Sampling
+
+| Function | What it does |
+|----------|-------------|
 | `random_yaw_quaternion()` | Random rotation about Z-axis |
 | `random_position_in_radius(center, radius, z)` | Random XY position in a circle |
-
-### `Pose` dataclass
-
-Holds `position` (3D numpy) and `orientation` (quaternion numpy).
-Factory method `Pose.from_xyzq()` for readable construction.
 
 ---
 

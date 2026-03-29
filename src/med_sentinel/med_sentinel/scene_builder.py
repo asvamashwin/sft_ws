@@ -1,7 +1,8 @@
 """Scene builder for Med-Sentinel 360.
 
 Initializes the Isaac Sim world, imports the hospital environment,
-and spawns the Franka Panda robot at a configurable pose.
+spawns the Franka Panda robot, and loads the Pinocchio robot model
+from the vendored URDF for FK/IK/dynamics alongside the simulation.
 """
 
 from __future__ import annotations
@@ -15,13 +16,15 @@ import numpy as np
 
 from isaacsim import SimulationApp
 
+from med_sentinel.robot_model import PandaModel
+
 HEADLESS = "--headless" in sys.argv
 
-_CONFIG_PATH = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    "config",
-    "scene_params.yaml",
-)
+_PKG_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+_CONFIG_PATH = os.path.join(_PKG_ROOT, "config", "scene_params.yaml")
+_URDF_PATH = os.path.join(_PKG_ROOT, "description", "urdf", "panda.urdf")
+_SRDF_PATH = os.path.join(_PKG_ROOT, "description", "srdf", "panda.srdf")
 
 
 def load_config(path: str = _CONFIG_PATH) -> Dict[str, Any]:
@@ -62,6 +65,8 @@ class MedSentinelScene:
         )
         self._stage = omni.usd.get_context().get_stage()
         self._robot = None
+        self._panda_model: Optional[PandaModel] = None
+        self._robot_description: Optional[str] = None
 
     @property
     def world(self):
@@ -76,14 +81,25 @@ class MedSentinelScene:
         return self._robot
 
     @property
+    def panda_model(self) -> Optional[PandaModel]:
+        """Pinocchio model loaded from the vendored URDF."""
+        return self._panda_model
+
+    @property
+    def robot_description(self) -> Optional[str]:
+        """Raw URDF XML string for publishing as robot_description parameter."""
+        return self._robot_description
+
+    @property
     def sim_app(self) -> SimulationApp:
         return self._sim_app
 
     def build(self) -> "MedSentinelScene":
-        """Build the full scene: ground plane, hospital, and robot."""
+        """Build the full scene: ground plane, hospital, robot, and model."""
         self._add_ground_plane()
         self._import_hospital()
         self._spawn_robot()
+        self._load_robot_model()
         return self
 
     def _add_ground_plane(self):
@@ -133,13 +149,27 @@ class MedSentinelScene:
             )
         )
 
+    def _load_robot_model(self):
+        """Load the Pinocchio model from the vendored URDF/SRDF."""
+        self._panda_model = PandaModel(urdf_path=_URDF_PATH, srdf_path=_SRDF_PATH)
+
+        with open(_URDF_PATH, "r") as f:
+            self._robot_description = f.read()
+
+        print(f"[MedSentinel] Pinocchio model loaded: "
+              f"nq={self._panda_model.nq}, nv={self._panda_model.nv}")
+
     def reset(self):
-        """Reset the world and apply default joint positions."""
+        """Reset the world and apply default joint positions from SRDF."""
         self._world.reset()
         if self._robot is not None:
-            default_joints = self._config["robot"].get("default_joint_positions")
-            if default_joints:
-                self._robot.set_joint_positions(np.array(default_joints))
+            if self._panda_model is not None:
+                default_q = self._panda_model.default_configuration()
+                self._robot.set_joint_positions(default_q)
+            else:
+                default_joints = self._config["robot"].get("default_joint_positions")
+                if default_joints:
+                    self._robot.set_joint_positions(np.array(default_joints))
 
     def step(self):
         """Advance the simulation by one step."""

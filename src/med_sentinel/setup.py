@@ -14,6 +14,10 @@ setup(
         (os.path.join('share', package_name, 'launch'), glob('launch/*.py')),
         (os.path.join('share', package_name, 'config'), glob('config/*.yaml')),
         (os.path.join('share', package_name, 'proto'), glob('proto/*.proto')),
+        (os.path.join('share', package_name, 'description', 'urdf'), glob('description/urdf/*.urdf')),
+        (os.path.join('share', package_name, 'description', 'srdf'), glob('description/srdf/*.srdf')),
+        (os.path.join('share', package_name, 'description', 'meshes', 'collision'), glob('description/meshes/collision/*.stl')),
+        (os.path.join('share', package_name, 'description', 'meshes', 'visual'), glob('description/meshes/visual/*.dae')),
     ],
     install_requires=[
         'setuptools',
