@@ -41,6 +41,7 @@ setup(
             'bridge_server = med_sentinel.bridge.server:run_server',
             'bridge_benchmark = med_sentinel.bridge.benchmark:main',
             'bridge_stress_test = med_sentinel.bridge.stress_test:main',
+            'safety_test = med_sentinel.safety.safety_test_runner:main',
         ],
     },
 )

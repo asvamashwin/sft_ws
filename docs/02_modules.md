@@ -33,6 +33,13 @@ src/med_sentinel/
 │       ├── sim_bridge.py           # Isaac Sim <-> server bridge
 │       ├── benchmark.py            # Latency benchmark client
 │       └── stress_test.py          # Multi-client stress test
+│   └── safety/
+│       ├── human_tracker.py       # Spawn & track human skeleton joints
+│       ├── distance_monitor.py    # Robot capsule <-> human point distances
+│       ├── ssm_controller.py      # ISO 15066 SSM velocity scaling
+│       ├── pfl_monitor.py         # Contact sensor force limit enforcement
+│       ├── safety_logger.py       # CSV + protobuf safety telemetry
+│       └── safety_test_runner.py  # 5 automated validation scenarios
 ├── setup.py
 ├── setup.cfg
 └── package.xml
@@ -303,3 +310,129 @@ at a configurable rate. Reports per-client and aggregate statistics.
 ```bash
 python -m med_sentinel.bridge.stress_test --clients 5 --duration 30 --cmd-hz 100
 ```
+
+---
+
+## safety/human_tracker.py
+
+**Purpose**: Tracks a human avatar's skeletal joints for SSM distance computation.
+
+### Class: `HumanTracker`
+
+| Method | What it does |
+|--------|-------------|
+| `spawn(stage, nucleus_root)` | Spawn human USD on stage, or initialise standalone mode |
+| `update(dt)` | Read joint positions and compute finite-difference velocities |
+| `set_base_position(pos)` | Teleport the human (standalone mode) |
+| `move_toward(target, speed, dt)` | Move toward a point at given speed |
+| `move_along_waypoints(wp, speed, dt)` | Follow a waypoint sequence |
+| `get_joint_positions()` | `Dict[str, np.ndarray]` of world joint positions |
+| `get_joint_velocities()` | `Dict[str, np.ndarray]` of joint velocities |
+| `get_max_speed()` | Peak speed across all joints (m/s) |
+| `body_region(joint_name)` | Map joint to ISO 15066 body region |
+
+### Skeleton Joints
+
+Tracks 20 joints: Hips, Spine (x3), Neck, Head, Left/Right Shoulder,
+Arm, ForeArm, Hand, UpLeg, Leg, Foot.  When Isaac Sim is available,
+reads real `UsdSkel` joint transforms; otherwise uses T-pose offsets
+relative to a movable base position.
+
+---
+
+## safety/distance_monitor.py
+
+**Purpose**: Computes minimum robot-human distance using capsule-point geometry.
+
+### Class: `DistanceMonitor`
+
+| Method | What it does |
+|--------|-------------|
+| `compute(q)` | Compute all pairwise distances, return `DistanceResult` |
+| `last_result` | Most recent `DistanceResult` |
+
+### `DistanceResult` dataclass
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `d_min` | float | Global minimum distance (m) |
+| `closest_link` | str | Robot link nearest to human |
+| `closest_human_joint` | str | Human joint nearest to robot |
+| `all_distances` | Dict | Per (link, joint) pair distances |
+
+---
+
+## safety/ssm_controller.py
+
+**Purpose**: ISO 15066 SSM velocity scaling.
+
+### Class: `SSMController`
+
+| Method | What it does |
+|--------|-------------|
+| `update(q, dq, dt)` | Compute S_p, classify zone, return `SSMState` |
+| `get_max_allowed_velocity()` | Current velocity_scale [0-1] |
+
+### `SSMState` dataclass
+
+| Field | Description |
+|-------|-------------|
+| `d_min` | Minimum human-robot distance |
+| `S_p` | Protective separation distance |
+| `velocity_scale` | Applied scaling factor [0.0 - 1.0] |
+| `zone` | GREEN / YELLOW / RED |
+| `protective_stop` | True if robot stopped |
+| `v_robot`, `v_human` | Cartesian speeds at closest pair |
+
+---
+
+## safety/pfl_monitor.py
+
+**Purpose**: Contact sensor monitoring with ISO 15066 force limits.
+
+### Class: `PFLMonitor`
+
+| Method | What it does |
+|--------|-------------|
+| `setup_sensors(stage, robot_prim)` | Attach ContactSensor to each link |
+| `update(closest_joint, closest_link)` | Read forces, check limits, return `PFLState` |
+| `inject_force(link, force)` | Inject a force for standalone testing |
+| `get_force_limit(region)` | Lookup ISO limit for a body region |
+
+---
+
+## safety/safety_logger.py
+
+**Purpose**: Logs per-cycle safety data to CSV and protobuf telemetry.
+
+### Class: `SafetyLogger`
+
+| Method | What it does |
+|--------|-------------|
+| `start()` | Open CSV, write header |
+| `stop()` | Close CSV, print record count |
+| `log(ssm_state, pfl_state)` | Write one cycle to CSV + push proto |
+| `set_bridge_callback(fn)` | Register callback for SafetyState streaming |
+| `summary()` | Compute statistics over all logged records |
+
+---
+
+## safety/safety_test_runner.py
+
+**Purpose**: Five automated ISO 15066 validation scenarios.
+
+### Class: `SafetyTestRunner`
+
+| Method | What it does |
+|--------|-------------|
+| `run_all()` | Execute all 5 tests, return `List[TestResult]` |
+
+### Usage
+
+```bash
+ros2 run med_sentinel safety_test
+# or
+python -m med_sentinel.safety.safety_test_runner -c config/scene_params.yaml
+```
+
+See `docs/05_safety_ssm.md` for detailed test descriptions and pass criteria.

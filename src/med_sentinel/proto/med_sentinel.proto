@@ -88,3 +88,37 @@ message PingPong {
   Timestamp server_send  = 3;
   uint64    sequence      = 4;
 }
+
+// ISO 15066 safety zone classification
+enum SafetyZone {
+  ZONE_GREEN  = 0;  // full speed -- human far away
+  ZONE_YELLOW = 1;  // scaled speed -- human approaching
+  ZONE_RED    = 2;  // protective stop -- human too close
+}
+
+// Real-time safety state streamed at 100Hz alongside RobotState
+message SafetyState {
+  Timestamp stamp             = 1;
+  uint64    sequence          = 2;
+  double    d_min             = 3;   // minimum human-robot distance (m)
+  double    S_p               = 4;   // protective separation distance (m)
+  double    velocity_scale    = 5;   // applied scaling factor [0.0 - 1.0]
+  string    closest_link      = 6;   // robot link nearest to human
+  string    closest_human     = 7;   // human joint nearest to robot
+  SafetyZone zone             = 8;
+  double    max_contact_force = 9;   // peak contact force this step (N)
+  bool      protective_stop   = 10;  // true if robot is stopped for safety
+  double    v_robot           = 11;  // robot Cartesian speed at closest link (m/s)
+  double    v_human           = 12;  // human speed at closest joint (m/s)
+}
+
+// Logged per-test safety validation result
+message SafetyTestResult {
+  string    test_name         = 1;
+  bool      passed            = 2;
+  double    stop_time_ms      = 3;   // time from trigger to full stop
+  double    force_at_impact_N = 4;
+  double    d_min_at_stop     = 5;   // distance when stop completed
+  double    v_max_at_trigger  = 6;   // robot speed when stop triggered
+  repeated SafetyState trace  = 7;   // full safety state timeline
+}

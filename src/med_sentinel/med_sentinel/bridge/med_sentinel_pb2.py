@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x12med_sentinel.proto\x12\x0cmed_sentinel\"+\n\tTimestamp\x12\x0f\n\x07seconds\x18\x01 \x01(\x03\x12\r\n\x05nanos\x18\x02 \x01(\x05\"*\n\x07Vector3\x12\t\n\x01x\x18\x01 \x01(\x01\x12\t\n\x01y\x18\x02 \x01(\x01\x12\t\n\x01z\x18\x03 \x01(\x01\"8\n\nQuaternion\x12\t\n\x01w\x18\x01 \x01(\x01\x12\t\n\x01x\x18\x02 \x01(\x01\x12\t\n\x01y\x18\x03 \x01(\x01\x12\t\n\x01z\x18\x04 \x01(\x01\"^\n\x04Pose\x12\'\n\x08position\x18\x01 \x01(\x0b\x32\x15.med_sentinel.Vector3\x12-\n\x0borientation\x18\x02 \x01(\x0b\x32\x18.med_sentinel.Quaternion\"N\n\nJointState\x12\x0c\n\x04name\x18\x01 \x03(\t\x12\x10\n\x08position\x18\x02 \x03(\x01\x12\x10\n\x08velocity\x18\x03 \x03(\x01\x12\x0e\n\x06\x65\x66\x66ort\x18\x04 \x03(\x01\"\x95\x01\n\x10\x45ndEffectorState\x12 \n\x04pose\x18\x01 \x01(\x0b\x32\x12.med_sentinel.Pose\x12.\n\x0flinear_velocity\x18\x02 \x01(\x0b\x32\x15.med_sentinel.Vector3\x12/\n\x10\x61ngular_velocity\x18\x03 \x01(\x0b\x32\x15.med_sentinel.Vector3\"\xa3\x02\n\nRobotState\x12&\n\x05stamp\x18\x01 \x01(\x0b\x32\x17.med_sentinel.Timestamp\x12\x10\n\x08sequence\x18\x02 \x01(\x04\x12\x12\n\nrobot_name\x18\x03 \x01(\t\x12-\n\x0bjoint_state\x18\x04 \x01(\x0b\x32\x18.med_sentinel.JointState\x12\x34\n\x0c\x65nd_effector\x18\x05 \x01(\x0b\x32\x1e.med_sentinel.EndEffectorState\x12%\n\tbase_pose\x18\x06 \x01(\x0b\x32\x12.med_sentinel.Pose\x12)\n\x06status\x18\x07 \x01(\x0e\x32\x19.med_sentinel.RobotStatus\x12\x10\n\x08sim_time\x18\x08 \x01(\x01\"\xc1\x01\n\x0e\x43ontrolCommand\x12&\n\x05stamp\x18\x01 \x01(\x0b\x32\x17.med_sentinel.Timestamp\x12\x10\n\x08sequence\x18\x02 \x01(\x04\x12\'\n\x04mode\x18\x03 \x01(\x0e\x32\x19.med_sentinel.ControlMode\x12\x15\n\rjoint_targets\x18\x04 \x03(\x01\x12\x14\n\x0cmax_velocity\x18\x05 \x01(\x01\x12\x11\n\tmax_accel\x18\x06 \x01(\x01\x12\x0c\n\x04stop\x18\x07 \x01(\x08\"\xa6\x01\n\x08PingPong\x12,\n\x0b\x63lient_send\x18\x01 \x01(\x0b\x32\x17.med_sentinel.Timestamp\x12,\n\x0bserver_recv\x18\x02 \x01(\x0b\x32\x17.med_sentinel.Timestamp\x12,\n\x0bserver_send\x18\x03 \x01(\x0b\x32\x17.med_sentinel.Timestamp\x12\x10\n\x08sequence\x18\x04 \x01(\x04*\x8a\x01\n\x0bRobotStatus\x12\x18\n\x14ROBOT_STATUS_UNKNOWN\x10\x00\x12\x15\n\x11ROBOT_STATUS_IDLE\x10\x01\x12\x17\n\x13ROBOT_STATUS_MOVING\x10\x02\x12\x16\n\x12ROBOT_STATUS_ERROR\x10\x03\x12\x19\n\x15ROBOT_STATUS_ESTOPPED\x10\x04*\\\n\x0b\x43ontrolMode\x12\x19\n\x15\x43ONTROL_MODE_POSITION\x10\x00\x12\x19\n\x15\x43ONTROL_MODE_VELOCITY\x10\x01\x12\x17\n\x13\x43ONTROL_MODE_EFFORT\x10\x02\x62\x06proto3'
+  serialized_pb=b'\n\x12med_sentinel.proto\x12\x0cmed_sentinel\"+\n\tTimestamp\x12\x0f\n\x07seconds\x18\x01 \x01(\x03\x12\r\n\x05nanos\x18\x02 \x01(\x05\"*\n\x07Vector3\x12\t\n\x01x\x18\x01 \x01(\x01\x12\t\n\x01y\x18\x02 \x01(\x01\x12\t\n\x01z\x18\x03 \x01(\x01\"8\n\nQuaternion\x12\t\n\x01w\x18\x01 \x01(\x01\x12\t\n\x01x\x18\x02 \x01(\x01\x12\t\n\x01y\x18\x03 \x01(\x01\x12\t\n\x01z\x18\x04 \x01(\x01\"^\n\x04Pose\x12\'\n\x08position\x18\x01 \x01(\x0b\x32\x15.med_sentinel.Vector3\x12-\n\x0borientation\x18\x02 \x01(\x0b\x32\x18.med_sentinel.Quaternion\"N\n\nJointState\x12\x0c\n\x04name\x18\x01 \x03(\t\x12\x10\n\x08position\x18\x02 \x03(\x01\x12\x10\n\x08velocity\x18\x03 \x03(\x01\x12\x0e\n\x06\x65\x66\x66ort\x18\x04 \x03(\x01\"\x95\x01\n\x10\x45ndEffectorState\x12 \n\x04pose\x18\x01 \x01(\x0b\x32\x12.med_sentinel.Pose\x12.\n\x0flinear_velocity\x18\x02 \x01(\x0b\x32\x15.med_sentinel.Vector3\x12/\n\x10\x61ngular_velocity\x18\x03 \x01(\x0b\x32\x15.med_sentinel.Vector3\"\xa3\x02\n\nRobotState\x12&\n\x05stamp\x18\x01 \x01(\x0b\x32\x17.med_sentinel.Timestamp\x12\x10\n\x08sequence\x18\x02 \x01(\x04\x12\x12\n\nrobot_name\x18\x03 \x01(\t\x12-\n\x0bjoint_state\x18\x04 \x01(\x0b\x32\x18.med_sentinel.JointState\x12\x34\n\x0c\x65nd_effector\x18\x05 \x01(\x0b\x32\x1e.med_sentinel.EndEffectorState\x12%\n\tbase_pose\x18\x06 \x01(\x0b\x32\x12.med_sentinel.Pose\x12)\n\x06status\x18\x07 \x01(\x0e\x32\x19.med_sentinel.RobotStatus\x12\x10\n\x08sim_time\x18\x08 \x01(\x01\"\xc1\x01\n\x0e\x43ontrolCommand\x12&\n\x05stamp\x18\x01 \x01(\x0b\x32\x17.med_sentinel.Timestamp\x12\x10\n\x08sequence\x18\x02 \x01(\x04\x12\'\n\x04mode\x18\x03 \x01(\x0e\x32\x19.med_sentinel.ControlMode\x12\x15\n\rjoint_targets\x18\x04 \x03(\x01\x12\x14\n\x0cmax_velocity\x18\x05 \x01(\x01\x12\x11\n\tmax_accel\x18\x06 \x01(\x01\x12\x0c\n\x04stop\x18\x07 \x01(\x08\"\xa6\x01\n\x08PingPong\x12,\n\x0b\x63lient_send\x18\x01 \x01(\x0b\x32\x17.med_sentinel.Timestamp\x12,\n\x0bserver_recv\x18\x02 \x01(\x0b\x32\x17.med_sentinel.Timestamp\x12,\n\x0bserver_send\x18\x03 \x01(\x0b\x32\x17.med_sentinel.Timestamp\x12\x10\n\x08sequence\x18\x04 \x01(\x04\"\xa6\x02\n\x0bSafetyState\x12&\n\x05stamp\x18\x01 \x01(\x0b\x32\x17.med_sentinel.Timestamp\x12\x10\n\x08sequence\x18\x02 \x01(\x04\x12\r\n\x05\x64_min\x18\x03 \x01(\x01\x12\x0b\n\x03S_p\x18\x04 \x01(\x01\x12\x16\n\x0evelocity_scale\x18\x05 \x01(\x01\x12\x14\n\x0c\x63losest_link\x18\x06 \x01(\t\x12\x15\n\rclosest_human\x18\x07 \x01(\t\x12&\n\x04zone\x18\x08 \x01(\x0e\x32\x18.med_sentinel.SafetyZone\x12\x19\n\x11max_contact_force\x18\t \x01(\x01\x12\x17\n\x0fprotective_stop\x18\n \x01(\x08\x12\x0f\n\x07v_robot\x18\x0b \x01(\x01\x12\x0f\n\x07v_human\x18\x0c \x01(\x01\"\xc1\x01\n\x10SafetyTestResult\x12\x11\n\ttest_name\x18\x01 \x01(\t\x12\x0e\n\x06passed\x18\x02 \x01(\x08\x12\x14\n\x0cstop_time_ms\x18\x03 \x01(\x01\x12\x19\n\x11\x66orce_at_impact_N\x18\x04 \x01(\x01\x12\x15\n\rd_min_at_stop\x18\x05 \x01(\x01\x12\x18\n\x10v_max_at_trigger\x18\x06 \x01(\x01\x12(\n\x05trace\x18\x07 \x03(\x0b\x32\x19.med_sentinel.SafetyState*\x8a\x01\n\x0bRobotStatus\x12\x18\n\x14ROBOT_STATUS_UNKNOWN\x10\x00\x12\x15\n\x11ROBOT_STATUS_IDLE\x10\x01\x12\x17\n\x13ROBOT_STATUS_MOVING\x10\x02\x12\x16\n\x12ROBOT_STATUS_ERROR\x10\x03\x12\x19\n\x15ROBOT_STATUS_ESTOPPED\x10\x04*\\\n\x0b\x43ontrolMode\x12\x19\n\x15\x43ONTROL_MODE_POSITION\x10\x00\x12\x19\n\x15\x43ONTROL_MODE_VELOCITY\x10\x01\x12\x17\n\x13\x43ONTROL_MODE_EFFORT\x10\x02*;\n\nSafetyZone\x12\x0e\n\nZONE_GREEN\x10\x00\x12\x0f\n\x0bZONE_YELLOW\x10\x01\x12\x0c\n\x08ZONE_RED\x10\x02\x62\x06proto3'
 )
 
 _ROBOTSTATUS = _descriptor.EnumDescriptor(
@@ -58,8 +58,8 @@ _ROBOTSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1171,
-  serialized_end=1309,
+  serialized_start=1664,
+  serialized_end=1802,
 )
 _sym_db.RegisterEnumDescriptor(_ROBOTSTATUS)
 
@@ -89,12 +89,43 @@ _CONTROLMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1311,
-  serialized_end=1403,
+  serialized_start=1804,
+  serialized_end=1896,
 )
 _sym_db.RegisterEnumDescriptor(_CONTROLMODE)
 
 ControlMode = enum_type_wrapper.EnumTypeWrapper(_CONTROLMODE)
+_SAFETYZONE = _descriptor.EnumDescriptor(
+  name='SafetyZone',
+  full_name='med_sentinel.SafetyZone',
+  filename=None,
+  file=DESCRIPTOR,
+  create_key=_descriptor._internal_create_key,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='ZONE_GREEN', index=0, number=0,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='ZONE_YELLOW', index=1, number=1,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='ZONE_RED', index=2, number=2,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=1898,
+  serialized_end=1957,
+)
+_sym_db.RegisterEnumDescriptor(_SAFETYZONE)
+
+SafetyZone = enum_type_wrapper.EnumTypeWrapper(_SAFETYZONE)
 ROBOT_STATUS_UNKNOWN = 0
 ROBOT_STATUS_IDLE = 1
 ROBOT_STATUS_MOVING = 2
@@ -103,6 +134,9 @@ ROBOT_STATUS_ESTOPPED = 4
 CONTROL_MODE_POSITION = 0
 CONTROL_MODE_VELOCITY = 1
 CONTROL_MODE_EFFORT = 2
+ZONE_GREEN = 0
+ZONE_YELLOW = 1
+ZONE_RED = 2
 
 
 
@@ -589,6 +623,189 @@ _PINGPONG = _descriptor.Descriptor(
   serialized_end=1168,
 )
 
+
+_SAFETYSTATE = _descriptor.Descriptor(
+  name='SafetyState',
+  full_name='med_sentinel.SafetyState',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='stamp', full_name='med_sentinel.SafetyState.stamp', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='sequence', full_name='med_sentinel.SafetyState.sequence', index=1,
+      number=2, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='d_min', full_name='med_sentinel.SafetyState.d_min', index=2,
+      number=3, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='S_p', full_name='med_sentinel.SafetyState.S_p', index=3,
+      number=4, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='velocity_scale', full_name='med_sentinel.SafetyState.velocity_scale', index=4,
+      number=5, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='closest_link', full_name='med_sentinel.SafetyState.closest_link', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='closest_human', full_name='med_sentinel.SafetyState.closest_human', index=6,
+      number=7, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='zone', full_name='med_sentinel.SafetyState.zone', index=7,
+      number=8, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='max_contact_force', full_name='med_sentinel.SafetyState.max_contact_force', index=8,
+      number=9, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='protective_stop', full_name='med_sentinel.SafetyState.protective_stop', index=9,
+      number=10, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='v_robot', full_name='med_sentinel.SafetyState.v_robot', index=10,
+      number=11, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='v_human', full_name='med_sentinel.SafetyState.v_human', index=11,
+      number=12, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1171,
+  serialized_end=1465,
+)
+
+
+_SAFETYTESTRESULT = _descriptor.Descriptor(
+  name='SafetyTestResult',
+  full_name='med_sentinel.SafetyTestResult',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='test_name', full_name='med_sentinel.SafetyTestResult.test_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='passed', full_name='med_sentinel.SafetyTestResult.passed', index=1,
+      number=2, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='stop_time_ms', full_name='med_sentinel.SafetyTestResult.stop_time_ms', index=2,
+      number=3, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='force_at_impact_N', full_name='med_sentinel.SafetyTestResult.force_at_impact_N', index=3,
+      number=4, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='d_min_at_stop', full_name='med_sentinel.SafetyTestResult.d_min_at_stop', index=4,
+      number=5, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='v_max_at_trigger', full_name='med_sentinel.SafetyTestResult.v_max_at_trigger', index=5,
+      number=6, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='trace', full_name='med_sentinel.SafetyTestResult.trace', index=6,
+      number=7, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1468,
+  serialized_end=1661,
+)
+
 _POSE.fields_by_name['position'].message_type = _VECTOR3
 _POSE.fields_by_name['orientation'].message_type = _QUATERNION
 _ENDEFFECTORSTATE.fields_by_name['pose'].message_type = _POSE
@@ -604,6 +821,9 @@ _CONTROLCOMMAND.fields_by_name['mode'].enum_type = _CONTROLMODE
 _PINGPONG.fields_by_name['client_send'].message_type = _TIMESTAMP
 _PINGPONG.fields_by_name['server_recv'].message_type = _TIMESTAMP
 _PINGPONG.fields_by_name['server_send'].message_type = _TIMESTAMP
+_SAFETYSTATE.fields_by_name['stamp'].message_type = _TIMESTAMP
+_SAFETYSTATE.fields_by_name['zone'].enum_type = _SAFETYZONE
+_SAFETYTESTRESULT.fields_by_name['trace'].message_type = _SAFETYSTATE
 DESCRIPTOR.message_types_by_name['Timestamp'] = _TIMESTAMP
 DESCRIPTOR.message_types_by_name['Vector3'] = _VECTOR3
 DESCRIPTOR.message_types_by_name['Quaternion'] = _QUATERNION
@@ -613,8 +833,11 @@ DESCRIPTOR.message_types_by_name['EndEffectorState'] = _ENDEFFECTORSTATE
 DESCRIPTOR.message_types_by_name['RobotState'] = _ROBOTSTATE
 DESCRIPTOR.message_types_by_name['ControlCommand'] = _CONTROLCOMMAND
 DESCRIPTOR.message_types_by_name['PingPong'] = _PINGPONG
+DESCRIPTOR.message_types_by_name['SafetyState'] = _SAFETYSTATE
+DESCRIPTOR.message_types_by_name['SafetyTestResult'] = _SAFETYTESTRESULT
 DESCRIPTOR.enum_types_by_name['RobotStatus'] = _ROBOTSTATUS
 DESCRIPTOR.enum_types_by_name['ControlMode'] = _CONTROLMODE
+DESCRIPTOR.enum_types_by_name['SafetyZone'] = _SAFETYZONE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 Timestamp = _reflection.GeneratedProtocolMessageType('Timestamp', (_message.Message,), {
@@ -679,6 +902,20 @@ PingPong = _reflection.GeneratedProtocolMessageType('PingPong', (_message.Messag
   # @@protoc_insertion_point(class_scope:med_sentinel.PingPong)
   })
 _sym_db.RegisterMessage(PingPong)
+
+SafetyState = _reflection.GeneratedProtocolMessageType('SafetyState', (_message.Message,), {
+  'DESCRIPTOR' : _SAFETYSTATE,
+  '__module__' : 'med_sentinel_pb2'
+  # @@protoc_insertion_point(class_scope:med_sentinel.SafetyState)
+  })
+_sym_db.RegisterMessage(SafetyState)
+
+SafetyTestResult = _reflection.GeneratedProtocolMessageType('SafetyTestResult', (_message.Message,), {
+  'DESCRIPTOR' : _SAFETYTESTRESULT,
+  '__module__' : 'med_sentinel_pb2'
+  # @@protoc_insertion_point(class_scope:med_sentinel.SafetyTestResult)
+  })
+_sym_db.RegisterMessage(SafetyTestResult)
 
 
 # @@protoc_insertion_point(module_scope)

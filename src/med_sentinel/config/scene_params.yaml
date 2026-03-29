@@ -43,3 +43,40 @@ omnigraph:
   ros2_bridge:
     joint_state_topic: "/joint_states"
     joint_command_topic: "/joint_commands"
+
+safety:
+  ssm:
+    T_reaction: 0.1            # seconds -- sensing + controller latency
+    T_stopping: 0.2            # seconds -- worst-case stopping time
+    C_intrusion: 0.05          # meters -- sensor intrusion distance
+    Z_d: 0.04                  # meters -- human position uncertainty
+    Z_r: 0.02                  # meters -- robot position uncertainty
+    v_human_max: 1.6           # m/s -- max assumed human approach speed
+    margin: 0.3                # meters -- yellow zone width above S_p
+  pfl:
+    force_limits:              # ISO 15066 Table A.2 transient limits (N)
+      head: 130
+      chest: 280
+      hand: 210
+      arm: 250
+      leg: 300
+    default_limit: 250         # fallback if body region unknown
+  human:
+    usd_path: "/Isaac/People/Characters/Male/male.usd"
+    prim_path: "/World/Human"
+    start_position: [2.0, 0.0, 0.0]
+    orientation: [1.0, 0.0, 0.0, 0.0]
+  robot_capsules:              # approximate link collision geometry
+    panda_link0: { radius: 0.06, length: 0.333 }
+    panda_link1: { radius: 0.06, length: 0.0 }
+    panda_link2: { radius: 0.06, length: 0.316 }
+    panda_link3: { radius: 0.05, length: 0.0 }
+    panda_link4: { radius: 0.05, length: 0.384 }
+    panda_link5: { radius: 0.05, length: 0.0 }
+    panda_link6: { radius: 0.04, length: 0.088 }
+    panda_link7: { radius: 0.04, length: 0.107 }
+    panda_hand:  { radius: 0.04, length: 0.058 }
+  logging:
+    output_dir: "safety_logs"
+    csv_enabled: true
+    proto_enabled: true
