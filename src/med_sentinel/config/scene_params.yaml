@@ -1,0 +1,43 @@
+scene:
+  physics_dt: 0.01667            # ~60 Hz physics step
+  rendering_dt: 0.01667          # ~60 Hz render step
+  gravity: [0.0, 0.0, -9.81]
+
+hospital:
+  usd_path: "/Isaac/Environments/Hospital/hospital.usd"
+  prim_path: "/World/Hospital"
+  position: [0.0, 0.0, 0.0]
+  orientation: [1.0, 0.0, 0.0, 0.0]  # w, x, y, z
+
+robot:
+  type: "franka"
+  usd_path: "/Isaac/Robots/Franka/franka_alt_fingers.usd"
+  prim_path: "/World/Franka"
+  position: [0.0, 0.0, 0.0]
+  orientation: [1.0, 0.0, 0.0, 0.0]  # w, x, y, z
+  planning_group: "panda_arm"
+  default_joint_positions: [0.0, -0.785, 0.0, -2.356, 0.0, 1.571, 0.785, 0.04, 0.04]
+
+obstacles:
+  spawn_radius: 2.0              # meters from robot base
+  min_distance: 0.3              # minimum spacing between obstacles
+  ground_z: 0.0                  # z height for floor-level spawning
+  assets:
+    medical_cart:
+      usd_path: "/Isaac/Environments/Hospital/Props/Medical_Cart.usd"
+      scale: [1.0, 1.0, 1.0]
+    iv_pole:
+      usd_path: "/Isaac/Environments/Hospital/Props/IV_Pole.usd"
+      scale: [1.0, 1.0, 1.0]
+    instrument_tray:
+      usd_path: "/Isaac/Environments/Hospital/Props/Instrument_Tray.usd"
+      scale: [1.0, 1.0, 1.0]
+    surgical_table:
+      usd_path: "/Isaac/Environments/Hospital/Props/Surgical_Table.usd"
+      scale: [1.0, 1.0, 1.0]
+
+omnigraph:
+  graph_path: "/World/ActionGraph"
+  ros2_bridge:
+    joint_state_topic: "/joint_states"
+    joint_command_topic: "/joint_commands"

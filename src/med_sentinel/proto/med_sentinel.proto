@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+package med_sentinel;
+
+// Timestamp with nanosecond precision for latency measurement
+message Timestamp {
+  int64 seconds = 1;
+  int32 nanos   = 2;
+}
+
+// 3D vector for positions and forces
+message Vector3 {
+  double x = 1;
+  double y = 2;
+  double z = 3;
+}
+
+// Quaternion in (w, x, y, z) convention
+message Quaternion {
+  double w = 1;
+  double x = 2;
+  double y = 3;
+  double z = 4;
+}
+
+// 6-DOF pose
+message Pose {
+  Vector3    position    = 1;
+  Quaternion orientation = 2;
+}
+
+// Per-joint state snapshot
+message JointState {
+  repeated string name     = 1;
+  repeated double position = 2;  // radians
+  repeated double velocity = 3;  // rad/s
+  repeated double effort   = 4;  // Nm
+}
+
+// End-effector state
+message EndEffectorState {
+  Pose   pose            = 1;
+  Vector3 linear_velocity  = 2;
+  Vector3 angular_velocity = 3;
+}
+
+enum RobotStatus {
+  ROBOT_STATUS_UNKNOWN  = 0;
+  ROBOT_STATUS_IDLE     = 1;
+  ROBOT_STATUS_MOVING   = 2;
+  ROBOT_STATUS_ERROR    = 3;
+  ROBOT_STATUS_ESTOPPED = 4;
+}
+
+// Full robot state published at 100Hz from Isaac Sim
+message RobotState {
+  Timestamp        stamp           = 1;
+  uint64           sequence        = 2;
+  string           robot_name      = 3;
+  JointState       joint_state     = 4;
+  EndEffectorState end_effector    = 5;
+  Pose             base_pose       = 6;
+  RobotStatus      status          = 7;
+  double           sim_time        = 8;  // Isaac Sim world time in seconds
+}
+
+enum ControlMode {
+  CONTROL_MODE_POSITION = 0;
+  CONTROL_MODE_VELOCITY = 1;
+  CONTROL_MODE_EFFORT   = 2;
+}
+
+// Command sent from web client to the robot
+message ControlCommand {
+  Timestamp       stamp          = 1;
+  uint64          sequence       = 2;
+  ControlMode     mode           = 3;
+  repeated double joint_targets  = 4;  // position (rad), velocity (rad/s), or effort (Nm)
+  double          max_velocity   = 5;  // scaling factor [0.0 - 1.0]
+  double          max_accel      = 6;  // scaling factor [0.0 - 1.0]
+  bool            stop           = 7;  // emergency stop flag
+}
+
+// Latency measurement echoed back from server
+message PingPong {
+  Timestamp client_send  = 1;
+  Timestamp server_recv  = 2;
+  Timestamp server_send  = 3;
+  uint64    sequence      = 4;
+}
